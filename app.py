@@ -12,16 +12,16 @@ pool = SeleniumPool(5)
 
 executor = ThreadPoolExecutor()
 
-loader_selectors = """
-[class*="loader"],
-[id*="loader"],
-[class*="loading"],
-[id*="loading"],
-[class*="spinner"],
-[id*="spinner"],
-[class*="progress"],
-[id*="progress"],
-"""
+loader_selectors = [
+    '[class*="loader"]',
+    '[id*="loader"]',
+    '[class*="loading"]',
+    '[id*="loading"]',
+    '[class*="spinner"]',
+    '[id*="spinner"]',
+    '[class*="progress"]',
+    '[id*="progress"]',
+]
 
 async def index(request):
     args = request.query
@@ -40,7 +40,7 @@ async def index(request):
     wait = WebDriverWait(instance, 10)
     
     try:
-        loading_icon = await asyncio.get_event_loop().run_in_executor(executor, wait.until, EC.invisibility_of_element_located((By.CSS_SELECTOR, loader_selectors )))
+        loading_icon = await asyncio.get_event_loop().run_in_executor(executor, wait.until, EC.invisibility_of_element_located((By.CSS_SELECTOR, ','.join(loader_selectors))))
     except:
         return web.Response(text='Timed out (10 seconds) waiting for loading icon to disappear')
         
