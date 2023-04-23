@@ -44,7 +44,10 @@ async def index(request):
         loading_icon = await asyncio.get_event_loop().run_in_executor(executor, wait.until, EC.invisibility_of_element_located((By.CSS_SELECTOR, ','.join(loader_selectors))))
     except:
         return web.Response(text='Timed out (10 seconds) waiting for loading icon to disappear')
-        
+    
+    # reset instance cookies and local storage
+    instance.delete_all_cookies()
+    instance.execute_script('window.localStorage.clear();')
     pool.release_instance(instance)
         
     return web.Response(content_type='text/html', text=instance.page_source)
