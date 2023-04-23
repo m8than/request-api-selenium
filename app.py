@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+import re
 import time
 from selenium_pool import SeleniumPool
 import atexit

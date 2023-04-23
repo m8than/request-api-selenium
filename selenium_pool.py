@@ -23,7 +23,11 @@ class SeleniumPool:
         options.add_argument("--no-sandbox") # Bypass OS security model
         # headless
         options.add_argument("--headless")
+        # set user agent
+        options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36")
+        
         driver = webdriver.Chrome(options=options)
+        
         driver.in_use = False # add in_use flag
         return driver
     
