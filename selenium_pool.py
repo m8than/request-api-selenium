@@ -30,6 +30,8 @@ class SeleniumPool:
         options.add_argument('--disable-cache')
         options.add_argument('--disable-cookies')
         options.add_argument("--disable-application-cache")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-notifications")
         
         
         
@@ -65,6 +67,7 @@ class SeleniumPool:
                 instance.quit()
                 new_instance = self.create_instance()
                 self.pool.append(new_instance)
+            time.sleep(1)
 
     def reset_pool(self):
         self.destroy_pool()
@@ -79,7 +82,7 @@ class SeleniumPool:
                 self.reset_pool()
                 pool_reset = time.time()
                 
-            if time.time() - pool_repair > 60:
+            if time.time() - pool_repair > 10:
                 self.repair_pool()
                 pool_repair = time.time()
                 

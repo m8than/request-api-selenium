@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-pool = SeleniumPool(5)
+pool = SeleniumPool(8)
 
 executor = ThreadPoolExecutor()
 
@@ -25,6 +25,7 @@ loader_selectors = [
 ]
 
 async def index(request):
+    print('Loading page: ' + request.query['url'])
     args = request.query
     
     if 'url' not in args:
@@ -48,9 +49,16 @@ async def index(request):
     # reset instance cookies and local storage
     instance.delete_all_cookies()
     instance.execute_script('window.localStorage.clear();')
+    
+    # get page source
+    source = instance.page_source
+    
+    instance.get('about:blank')
+        
     pool.release_instance(instance)
         
-    return web.Response(content_type='text/html', text=instance.page_source)
+    print('Loaded page: ' + request.query['url'])
+    return web.Response(content_type='text/html', text=source)
 
 def cleanup():
     pool.destroy_pool()
